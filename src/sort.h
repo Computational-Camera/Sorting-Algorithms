@@ -37,7 +37,7 @@ typedef struct{
     KeyType Key;
 }RecType;      
 
-typedef RecType SeqList[n+1];        
+typedef RecType SeqList[n];        
     
 SeqList R;
 
@@ -45,50 +45,57 @@ typedef enum{
     FALSE,TRUE
 }Boolean;          
 
-
-//============Insert Sort==========
-void InsertSort(){
-    int i,j;
-    for(i=2;i<=n;i++)
-        if(R[i].Key<R[i-1].Key){
-            R[0]=R[i];j=i-1;
-            do{R[j+1]=R[j];j--;}
-            while(R[0].Key<R[j].Key);
-                R[j+1]=R[0];
-       }
-}
-
 //===========Bubble Sort============
 void BubbleSort(){
     int i,j;
-    Boolean exchang;
-    for(i=1;i<=n;i++){
-      exchang=FALSE;
-      for(j=n-1;j>=i;j--)
-        if(R[j+1].Key<R[j].Key){
-            R[0]=R[j+1];
-            R[j+1]=R[j];
-            R[j]=R[0];
-            exchang=TRUE;
+    Boolean swap;
+    for(i=0;i<n;i++){
+        swap=FALSE;
+        for(j=n-1;j>i;j--)
+            if(R[j].Key<R[j-1].Key){
+                RecType temp=R[j];
+                R[j]=R[j-1];
+                R[j-1]=temp;
+                swap=TRUE;
+            }
+        if(swap==FALSE)
+            return;
+    }
+}
+//============Insert Sort==========
+void InsertSort(){  // O(n^2) good for online sorting
+    int i,j;
+    for(i=1;i<n;i++)
+        if(R[i].Key<R[i-1].Key){
+            RecType temp=R[i];
+            j=i-1;
+            while(temp.Key<R[j].Key){
+                R[j+1]=R[j];
+                j--;
+            }
+            R[j+1]=temp;
        }
-       if(!exchang){
-        return;
-       }
+}
+
+
+//==========Select Sort========
+void SelectSort(){ // O(n^2)
+    int i,j,k;
+    for(i=0;i<n;i++){
+        k=i;
+        for(j=i+1;j<n;j++)
+            if(R[j].Key<R[k].Key)
+                k=j;
+        if(k!=i){
+            RecType temp=R[i];
+            R[i]=R[k];
+            R[k]=temp;
+        }
     }
 }
 
-void SelectSort(){
-    int i,j,k;
-    for(i=0;i<n;i++){
-    k=i;
-    for(j=i+1;j<=n;j++)
-        if(R[j].Key<R[k].Key)
-            k=j;
-    if(k!=i){R[0]=R[i];R[i]=R[k];R[k]=R[0];}}
-}
-
 //===========Quick Sort==========
-int Partition(int i,int j){
+int Partition(int i,int j){  //O(nlogn)
     RecType pivot=R[i];
     while(i<j){
         while(i<j&&R[j].Key>=pivot.Key) 
@@ -114,7 +121,7 @@ void QuickSort1(int low,int high){
 }
 
 void QuickSort(){ 
-  QuickSort1(1,n);
+  QuickSort1(0,n);
 }
   
 //==========Heap Sort============
@@ -132,17 +139,17 @@ inline void Heapify(int low,int high){
 }
 
 inline void BuildHeap(){
-    for(int i = n>>1;i>0;--i)
+    for(int i = n>>1;i>=0;--i)
         Heapify(i,n);
 }
 
 void HeapSort(){
     BuildHeap();
-    for(int i=n;i>1;--i){
-        R[0]=R[1];
-        R[1]=R[i];
-        R[i]=R[0];
-        Heapify(1,i-1);
+    for(int i=n-1;i>0;--i){
+        RecType temp=R[0];
+        R[0]=R[i];
+        R[i]=temp;
+        Heapify(0,i-1);
     }
 }
 
@@ -174,6 +181,6 @@ void MergeSort1(int low,int high, RecType *Buffer_Ptr){
 
 void MergeSort(){
     RecType *Buffer_Ptr=(RecType *)malloc(n*sizeof(RecType));//high-low+1 is the required size in theory
-    MergeSort1(1,n, Buffer_Ptr);
+    MergeSort1(0,n-1, Buffer_Ptr);
     free(Buffer_Ptr);
 }

@@ -34,12 +34,12 @@ void Gen_Data(){
     time_t timer;
     time(&timer);
     srand(timer);
-    for(i=0;i<=n;i++)
+    for(i=0;i<n;i++)
     R[i].Key=rand();
 
     FILE *fp;
     fp=fopen("./data/INPUT.dat","w");
-    for(i=1;i<=n;i++)
+    for(i=0;i<n;i++)
         fprintf(fp,"%d ",R[i].Key);
     fclose(fp);
 }
@@ -48,7 +48,7 @@ void Load_Data(){
     long i;
     FILE *fp;
     fp=fopen("./data/INPUT.dat","r");
-    for(i=1;i<=n;i++)
+    for(i=0;i<n;i++)
         if (fscanf(fp,"%d",&R[i].Key)==0)
             std::cout<<"Error in Loading Data"<<std::endl;  
     fclose(fp);
@@ -58,22 +58,23 @@ void Save_Data(){
     long i;
     FILE *fp;
     fp=fopen("./data/OUTPUT.dat","w");
-    for(i=1;i<=n;i++)
+    for(i=0;i<n;i++)
         fprintf(fp,"%d ",R[i].Key);
     fclose(fp);
 }
 
 void Check_Data(){
     SeqList L;             
-    long i;
+    int i;
     FILE *fp;
     fp=fopen("./data/OUTPUT.dat","r");
-    for(i=1;i<=n;i++)   
+    for(i=0;i<n;i++)   
         if (fscanf(fp,"%d",&L[i].Key)==0)
             std::cout<<"Load Data Error in Checking"<<std::endl;  
     for(i=1;i<n;i++)      
-        if(L[i].Key>L[i+1].Key){
-            printf("error");
+        if(L[i].Key<L[i-1].Key){
+            std::cout<<L[0].Key<<" "<<L[i].Key<<" "<<L[i-1].Key<<std::endl;
+            std::cout<<i<<"  error"<<std::endl;
             break;
         }
     fclose(fp);
@@ -82,9 +83,9 @@ void Check_Data(){
 int main(){
     std::cout<<"===========Sorting Algorithms Test==========="<<std::endl; 
     Gen_Data();  
-    void (*fun_ptr[6])(void)  = {&InsertSort,&BubbleSort,&SelectSort,&QuickSort,&HeapSort,&MergeSort};  
-    const char *info[]        = {"1.Insert Sort:   ",
-                                 "2.Bubble Sort:   ",
+    void (*fun_ptr[6])(void)  = {&BubbleSort,&InsertSort,&SelectSort,&QuickSort,&HeapSort,&MergeSort};  
+    const char *info[]        = {"1.Bubble Sort:   ",
+                                 "2.Insert Sort:   ",
                                  "3.Select Sort:   ",
                                  "4.Quick  Sort:   ",
                                  "5.Heap   Sort:   ",
