@@ -1,0 +1,179 @@
+/************************************************************************/
+/* Sorting Algorithm Practice:                                          */
+/*                                                                      */
+/* Sort.h                                                               */
+/* Copyright 2002-2018                                                  */
+/*                                                                      */
+/* Permission is hereby granted, free of charge, to any person          */
+/* obtaining a copy of this software and associated documentation       */
+/* files (the "Software"), to deal in the Software without restriction, */
+/* including without limitation the rights to use, copy, modify, merge, */
+/* publish, distribute, sublicense, and/or sell copies of the Software, */
+/* and to permit persons to whom the Software is furnished to do so,    */
+/* subject to the following conditions:                                 */
+/*                                                                      */
+/* The above copyright notice and this permission notice shall be       */
+/* included in all copies or substantial portions of the Software.      */
+/*                                                                      */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF   */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND                */
+/* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS  */
+/* BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN   */
+/* ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN    */
+/* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE     */
+/* SOFTWARE.                                                            */
+/*                                                                      */
+/************************************************************************/
+
+#include <iostream>
+#include <cstring>
+
+#define n 10000
+
+typedef int KeyType;
+
+typedef struct{
+    KeyType Key;
+}RecType;      
+
+typedef RecType SeqList[n+1];        
+    
+SeqList R;
+
+typedef enum{
+    FALSE,TRUE
+}Boolean;          
+
+
+//============Insert Sort==========
+void InsertSort(){
+    int i,j;
+    for(i=2;i<=n;i++)
+        if(R[i].Key<R[i-1].Key){
+            R[0]=R[i];j=i-1;
+            do{R[j+1]=R[j];j--;}
+            while(R[0].Key<R[j].Key);
+                R[j+1]=R[0];
+       }
+}
+
+//===========Bubble Sort============
+void BubbleSort(){
+    int i,j;
+    Boolean exchang;
+    for(i=1;i<=n;i++){
+      exchang=FALSE;
+      for(j=n-1;j>=i;j--)
+        if(R[j+1].Key<R[j].Key){
+            R[0]=R[j+1];
+            R[j+1]=R[j];
+            R[j]=R[0];
+            exchang=TRUE;
+       }
+       if(!exchang){
+        return;
+       }
+    }
+}
+
+void SelectSort(){
+    int i,j,k;
+    for(i=0;i<n;i++){
+    k=i;
+    for(j=i+1;j<=n;j++)
+        if(R[j].Key<R[k].Key)
+            k=j;
+    if(k!=i){R[0]=R[i];R[i]=R[k];R[k]=R[0];}}
+}
+
+//===========Quick Sort==========
+int Partition(int i,int j){
+    RecType pivot=R[i];
+    while(i<j){
+        while(i<j&&R[j].Key>=pivot.Key) 
+            j--;
+        if(i<j) 
+            R[i++]=R[j];
+        while(i<j&&R[i].Key<=pivot.Key) 
+            i++;
+        if(i<j) 
+            R[j--]=R[i];
+    }
+    R[i]=pivot;
+    return i;
+}
+
+void QuickSort1(int low,int high){     
+    int pivotpos;
+    if(low<high){
+        pivotpos=Partition(low,high);
+        QuickSort1(low,pivotpos-1);
+        QuickSort1(pivotpos+1,high);
+    }
+}
+
+void QuickSort(){ 
+  QuickSort1(1,n);
+}
+  
+//==========Heap Sort============
+inline void Heapify(int low,int high){
+    int large;
+    RecType temp=R[low];
+    for(large=2*low;large<=high;large*=2){
+        if(large<high&&R[large].Key<R[large+1].Key) 
+            large++;
+        if(temp.Key>=R[large].Key) break;
+        R[low]=R[large];
+        low=large;
+    }
+    R[low]=temp;
+}
+
+inline void BuildHeap(){
+    for(int i = n>>1;i>0;--i)
+        Heapify(i,n);
+}
+
+void HeapSort(){
+    BuildHeap();
+    for(int i=n;i>1;--i){
+        R[0]=R[1];
+        R[1]=R[i];
+        R[i]=R[0];
+        Heapify(1,i-1);
+    }
+}
+
+//=============Merge Sort============
+void inline Merges(int low,int m,int high, RecType *R1){
+    int i=low,j=m+1,p=0;
+    //RecType *R1=(RecType *)malloc((high-low+1)*sizeof(RecType));
+    while(i<=m&&j<=high)
+        R1[p++]=(R[i].Key<=R[j].Key) ? R[i++]:R[j++];
+    while(i<=m) 
+        R1[p++]=R[i++];
+    while(j<=high) 
+        R1[p++]=R[j++];
+    for(p=0,i=low;i<=high;++p,++i)
+        R[i]=R1[p];
+    //free(R1);
+    //memcpy(R+low, R1, (high-low+1)*sizeof(RecType));
+}
+
+void MergeSort1(int low,int high, RecType *Buffer_Ptr){
+    int mid;
+    if(low<high){
+        mid=(low+high)>>1;
+        MergeSort1(low,mid,    Buffer_Ptr);
+        MergeSort1(mid+1,high, Buffer_Ptr);
+        Merges(low,mid,high,   Buffer_Ptr);
+    }
+}
+
+void MergeSort(){
+    RecType *Buffer_Ptr=(RecType *)malloc(n*sizeof(RecType));//high-low+1 is the required size in theory
+    MergeSort1(1,n, Buffer_Ptr);
+    free(Buffer_Ptr);
+}
