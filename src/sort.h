@@ -26,8 +26,12 @@
 /*                                                                      */
 /************************************************************************/
 
+#ifndef _SORT
+#define _SORT
+
 #include <iostream>
 #include <cstring>
+#include <time.h>
 
 #define n 10000
 
@@ -184,3 +188,57 @@ void MergeSort(){
     MergeSort1(0,n-1, Buffer_Ptr);
     free(Buffer_Ptr);
 }
+
+void Gen_Data(){
+
+    long i;
+    time_t timer;
+    time(&timer);
+    srand(timer);
+    for(i=0;i<n;i++)
+    R[i].Key=rand();
+
+    FILE *fp;
+    fp=fopen("./data/INPUT.dat","w");
+    for(i=0;i<n;i++)
+        fprintf(fp,"%d ",R[i].Key);
+    fclose(fp);
+}
+
+void Load_Data(){
+    long i;
+    FILE *fp;
+    fp=fopen("./data/INPUT.dat","r");
+    for(i=0;i<n;i++)
+        if (fscanf(fp,"%d",&R[i].Key)==0)
+            std::cout<<"Error in Loading Data"<<std::endl;  
+    fclose(fp);
+}
+
+void Save_Data(){
+    long i;
+    FILE *fp;
+    fp=fopen("./data/OUTPUT.dat","w");
+    for(i=0;i<n;i++)
+        fprintf(fp,"%d ",R[i].Key);
+    fclose(fp);
+}
+
+void Check_Data(){
+    SeqList L;             
+    int i;
+    FILE *fp;
+    fp=fopen("./data/OUTPUT.dat","r");
+    for(i=0;i<n;i++)   
+        if (fscanf(fp,"%d",&L[i].Key)==0)
+            std::cout<<"Load Data Error in Checking"<<std::endl;  
+    for(i=1;i<n;i++)      
+        if(L[i].Key<L[i-1].Key){
+            std::cout<<L[0].Key<<" "<<L[i].Key<<" "<<L[i-1].Key<<std::endl;
+            std::cout<<i<<"  error"<<std::endl;
+            break;
+        }
+    fclose(fp);
+}
+
+#endif
