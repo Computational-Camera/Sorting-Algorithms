@@ -1,112 +1,145 @@
-#include "stdio.h"
+/************************************************************************/
+/* Binary Tree                                                          */
+/*                                                                      */
+/* btree.h                                                              */
+/* Copyright 2002-2018                                                  */
+/*                                                                      */
+/* Permission is hereby granted, free of charge, to any person          */
+/* obtaining a copy of this software and associated documentation       */
+/* files (the "Software"), to deal in the Software without restriction, */
+/* including without limitation the rights to use, copy, modify, merge, */
+/* publish, distribute, sublicense, and/or sell copies of the Software, */
+/* and to permit persons to whom the Software is furnished to do so,    */
+/* subject to the following conditions:                                 */
+/*                                                                      */
+/* The above copyright notice and this permission notice shall be       */
+/* included in all copies or substantial portions of the Software.      */
+/*                                                                      */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF   */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND                */
+/* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS  */
+/* BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN   */
+/* ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN    */
+/* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE     */
+/* SOFTWARE.                                                            */
+/*                                                                      */
+/************************************************************************/
+
+#ifndef _BINTREE
+#define _BINTREE
+
+#include <iostream>
+#include <cstring>
+#include <stdio.h>;
+
 #define NULL 0
 #define QueueSize 100
+
 typedef char DataType;
-typedef struct node{DataType data;             /*树结点定义*/
-		    struct node *lchild,*rchild;}BinTNode;
-typedef BinTNode *BinTree;       /*树结点指针*/
-BinTree root;                    /*根结点指针*/
-int i=0,j=0;                         /*结点计数，叶子计数*/
-typedef struct{int front;                     /*循环队列定义*/
-	       int rear;
-	       int count;
-	       BinTree data[QueueSize];}CirQueue;
-CirQueue *Q;                     /*队列指针*/
+typedef struct node{
+    DataType data;             /*Binary Tree Node Structure*/
+    struct node *lchild,*rchild;
+    }BinTNode;
+    
+typedef BinTNode *BinTree;    /*Binary Tree Node Pointer*/
+BinTree root;                 /*Root Ponter*/
+
+int i=0,j=0;                  /*Note number and Leave number*/
+
+typedef struct{
+    int front;                /*Tree?*/
+    int rear;
+    int count;
+    BinTree data[QueueSize];
+}CirQueue;
+
+CirQueue *Q;                 /**/
 
 
-BinTree CreatBinTree()                                        /*建立二叉树函数*/
-{char ch;
- BinTree T;
- if((ch=getchar())==' ')
- T=NULL;
- else{
-      T=(BinTNode *)malloc(sizeof(BinTNode));i++;/*结点计数*/
-      T->data=ch;
-      T->lchild=CreatBinTree();
-      T->rchild=CreatBinTree();
-      }
- return T;
- }
+BinTree CreatBinTree() {
+    char ch;
+    BinTree T;
+    if((ch=getchar())==' ')
+        T=NULL;
+    else{
+        T=(BinTNode *)malloc(sizeof(BinTNode));
+        i++;                 /*first node*/
+        T->data=ch;
+        T->lchild=CreatBinTree();
+        T->rchild=CreatBinTree();
+    }
+    return T;
+}
 
-void Preorder(BinTree T)                                      /*先序遍历函数*/
-{if(T){
-	  printf("%c",T->data);
-	  Preorder(T->lchild);
-	  Preorder(T->rchild);
+void Preorder(BinTree T){                                     /*Preoder*/
+    if(T){
+        printf("%c",T->data);
+        Preorder(T->lchild);
+        Preorder(T->rchild);
 	 }
 }
 
-void Inorder(BinTree T)                                       /*中序遍历函数*/
-{if(T){
-	  Inorder(T->lchild);
-	  printf("%c",T->data);
-	  Inorder(T->rchild);
-	 }
+void Inorder(BinTree T){                                      /*Inorder*/
+    if(T){
+        Inorder(T->lchild);
+        printf("%c",T->data);
+        Inorder(T->rchild);
+    }
 }
 
-void Postorder(BinTree T)                                     /*后序遍历函数*/
-{if(T){
-	  Postorder(T->lchild);
-	  Postorder(T->rchild);
-	  printf("%c",T->data);
-       }
-}
-
-CirQueue  *InitQueue()                                        /*队列初始化函数*/
-{Q=(CirQueue*)malloc(sizeof(CirQueue));
- Q->front=Q->rear=0;
- Q->count=0;
- return(Q);}
-
-int QueueEmpty()                                              /*判队空函数*/
-{return Q->count==0;}
-
-int QueueFull()                                    /*判队满函数*/
-{return Q->count==QueueSize;}
-
-void EnQueue(BinTree T)                                       /*入队函数*/
-{if(QueueFull(Q)) printf("error");
- Q->count++;
- Q->data[Q->rear]=T;
- Q->rear=(Q->rear+1)%QueueSize;}
-
-BinTree DeQueue()                                             /*出队函数*/
-{BinTree temp;
- temp=Q->data[Q->front];
- Q->count--;
- Q->front=(Q->front+1)%QueueSize;
- return temp;}
-
-void Levorder(BinTree T)                                      /*层次遍历函数*/
-{BinTree p;
- Q=InitQueue();
- if(T!=NULL)
- {EnQueue(T);
- while(!QueueEmpty())
- {p=DeQueue();
-  if(!(p->lchild||p->rchild)) j++;     /*叶子结点计数*/
-  printf("%c",p->data);
-  if(p->lchild!=NULL) EnQueue(p->lchild);
-  if(p->rchild!=NULL) EnQueue(p->rchild);}
-}
+void Postorder(BinTree T){                                    /*Postorder*/
+    if(T){
+	    Postorder(T->lchild);
+	    Postorder(T->rchild);
+	    printf("%c",T->data);
+    }
 }
 
 
+CirQueue  *InitQueue(){                                      /*Initialize the queue*/
+    Q=(CirQueue*)malloc(sizeof(CirQueue));
+    Q->front=Q->rear=0;
+    Q->count=0;
+    return(Q);
+}
 
+int QueueEmpty(){                                            /*Check if queue is empty*/
+    return Q->count==0;
+}
 
-main()                                                        /*主函数*/
-{char r,s[100];
- printf("******欢迎使用二叉树操作程序******\n");
-A:printf("请按先序遍历顺序输入结点（空结点用空格表示）：\n");
- root=CreatBinTree();
- printf("先序遍历为：");Preorder(root);printf("\n");
- printf("中序遍历为：");Inorder(root);printf("\n");
- printf("后序遍历为：");Postorder(root);printf("\n");
- printf("层次序遍历为：");Levorder(root);printf("\n");
- printf("叶子数为：%d，结点数为：%d\n",j,i);
-C:printf("是否继续使用（y,n）？");
- scanf("\n%c",&r);gets(s);
- if(r=='y'||r=='Y') {i=j=0;goto A;}
- if(r=='n'||r=='N') goto B;
- else goto C;
-B:printf("谢谢使用！");}
+int QueueFull(){                                             /*Check if queue is full*/
+    return Q->count==QueueSize;
+}
+
+void EnQueue(BinTree T){                                     /*Enter queue*/
+    if(QueueFull()) printf("error");
+    Q->count++;
+    Q->data[Q->rear]=T;
+    Q->rear=(Q->rear+1)%QueueSize;
+}
+
+BinTree DeQueue(){                                           /*Leave queue*/
+    BinTree temp;
+    temp=Q->data[Q->front];
+    Q->count--;
+    Q->front=(Q->front+1)%QueueSize;
+    return temp;
+}
+
+void Levorder(BinTree T){                                    /*Level traversal function*/
+    BinTree p;
+    Q=InitQueue();
+    if(T!=NULL){
+        EnQueue(T);
+        while(!QueueEmpty()){
+            p=DeQueue();
+            if(!(p->lchild||p->rchild)) j++;                 /*node counter*/
+            printf("%c",p->data);
+            if(p->lchild!=NULL) EnQueue(p->lchild);
+            if(p->rchild!=NULL) EnQueue(p->rchild);
+        }
+    }
+}
+
+#endif

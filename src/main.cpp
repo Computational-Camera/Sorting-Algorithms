@@ -1,6 +1,6 @@
-#include "sort.h"
-#include "linklist.h"
-
+//#include "sort.h"
+//#include "linklist.h"
+#include "bintree.h"
 
 /*
 int main(){
@@ -27,10 +27,35 @@ int main(){
     return 0;
 }
 */
+
+/*
 int main(){
-    printf("******Start******\n");
+    std::cout<<"===========Linklist Algorithms Test==========="<<std::endl; 
     head=CreatList();
     Display();
     Menu();
+    return 0;
+}
+*/
+
+
+int main(){                                                       /*Ö÷º¯Êý*/
+    char r,s[100];
+    std::cout<<"===========Binary Tree Algorithms Test==========="<<std::endl; 
+    A:printf(" Input nodes in preoder fashion\n");
+    root=CreatBinTree();
+    printf("Preorder result is ");      Preorder(root);   printf("\n");
+    printf("Inorder result is ");       Inorder(root);    printf("\n");
+    printf("Postorder result is");      Postorder(root);  printf("\n");
+    printf("Level traversal result is");Levorder(root);   printf("\n");
+    printf("numer of leaves: %d  number of nodes: %d\n",j,i);
+    C:printf("Give another try? ");
+    scanf("\n%c",&r);gets(s);
+    if(r=='y'||r=='Y') 
+        {i=j=0;goto A;}
+    if(r=='n'||r=='N') 
+        goto B;
+    else goto C;
+    B:std::cout<<"===========       Finish Test     ==========="<<std::endl;
     return 0;
 }
