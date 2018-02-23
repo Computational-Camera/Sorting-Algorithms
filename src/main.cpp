@@ -1,6 +1,7 @@
 //#include "sort.h"
 //#include "linklist.h"
-#include "bintree.h"
+//#include "bintree.h"
+#include "mgraph.h"
 
 /*
 int main(){
@@ -39,15 +40,23 @@ int main(){
 */
 
 
-int main(){                                                       /*Ö÷º¯Êý*/
+
+/*
+//Input format for a tree     a
+//                           / \
+//                           b c
+//  is ac  b  (enter)
+
+ 
+int main(){                                                      
     char r,s[100];
     std::cout<<"===========Binary Tree Algorithms Test==========="<<std::endl; 
-    A:printf(" Input nodes in preoder fashion\n");
+    A:printf("Input nodes in preoder fashion\n");
     root=CreatBinTree();
     printf("Preorder result is ");      Preorder(root);   printf("\n");
     printf("Inorder result is ");       Inorder(root);    printf("\n");
-    printf("Postorder result is");      Postorder(root);  printf("\n");
-    printf("Level traversal result is");Levorder(root);   printf("\n");
+    printf("Postorder result is ");      Postorder(root);  printf("\n");
+    printf("Level traversal result is ");Levorder(root);   printf("\n");
     printf("numer of leaves: %d  number of nodes: %d\n",j,i);
     C:printf("Give another try? ");
     scanf("\n%c",&r);gets(s);
@@ -57,5 +66,30 @@ int main(){                                                       /*Ö÷º¯Êý
         goto B;
     else goto C;
     B:std::cout<<"===========       Finish Test     ==========="<<std::endl;
+    return 0;
+}
+*/
+
+
+int main() {
+    char d;
+    char ch[100];
+    std::cout<<"===========Graph Algorithms Test==========="<<std::endl; 
+    A:printf("Option a.Undirected b.Directed Graph  : ");
+    scanf("%c",&d);
+    gets(ch);
+    MGraph G;
+    if(d=='a'||d=='A')      CreatMGraph1(&G);
+    else if(d=='b'||d=='B') CreatMGraph2(&G);
+    else goto A;
+    Display(&G);
+    DFSTraverse(&G);
+    BFSTraverse(&G);
+    C:printf("\nTry it agian? ");
+    scanf("\n%c",&d);gets(ch);
+    if(d=='y'||d=='Y') goto A;
+    if(d=='n'||d=='N') goto B;
+    else goto C;
+    B:printf("Thank You");
     return 0;
 }

@@ -25,8 +25,8 @@
 /* SOFTWARE.                                                            */
 /*                                                                      */
 /************************************************************************/
-#ifndef _LINKLIST
-#define _LINKLIST
+#ifndef _LINKEDLIST
+#define _LINKEDLIST
 
 #define NULL  0
 #define MAX 100
@@ -42,12 +42,12 @@ typedef ListNode *LinkList;
 ListNode *r,*s;             /*Link node pointers*/
 LinkList head;              /*Header pointer*/
 
-LinkList CreatList(){       /*Creat link list*/
+LinkList CreatList(){       /*Creat linked list*/
     DataType ch;
     printf("Please input link list, use END as finish \n");
     head=(LinkList)malloc(sizeof(ListNode));
     s=head;
-    while (strcmp(ch,"END")){   /*Linklist tail flag*/
+    while (strcmp(ch,"END")){   /*Linked list tail flag*/
         r=(ListNode*)malloc(sizeof(ListNode));
         gets(ch);
         strcpy((r->data),ch);
@@ -58,9 +58,9 @@ LinkList CreatList(){       /*Creat link list*/
     return head;
 }
 
-void Display(){             /*Display the link list*/
+void Display(){             /*Display the linked list*/
     DataType ch;
-    printf("Link list elements");
+    printf("Linked list elements");
     s=head->next;
     strcpy(ch,(s->data));
     printf("BEGIN");

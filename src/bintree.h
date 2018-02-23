@@ -31,7 +31,7 @@
 
 #include <iostream>
 #include <cstring>
-#include <stdio.h>;
+#include <stdio.h>
 
 #define NULL 0
 #define QueueSize 100
@@ -60,7 +60,9 @@ CirQueue *Q;                 /**/
 BinTree CreatBinTree() {
     char ch;
     BinTree T;
-    if((ch=getchar())==' ')
+    ch=getchar();
+    //putchar(ch);
+    if(ch==' ')
         T=NULL;
     else{
         T=(BinTNode *)malloc(sizeof(BinTNode));
